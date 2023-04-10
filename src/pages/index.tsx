@@ -16,7 +16,7 @@ export default function Home() {
           <Link href="/">Home</Link>
         </li>
         <li>
-          <Link href="/word_cloud">WordCloud</Link>
+          <Link href="/word-cloud">WordCloud</Link>
         </li>
         <li>
           <Link href="/about">About Us</Link>

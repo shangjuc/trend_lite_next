@@ -12,7 +12,11 @@ yarn dev
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:4500](http://localhost:4500) with your browser to see the result.
+
+
+如果有錯誤，可能是node version的問題，請使用node v16以上的版本。
+
 
 You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
