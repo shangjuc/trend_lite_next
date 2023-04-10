@@ -4,6 +4,30 @@ import React, { useEffect } from 'react';
 import WordCloud from 'wordcloud';
 
 
+let list = [];
+for (let i = 0; i < 100; i++){
+    let weight = Math.floor(Math.random() * 10);
+    if(i == 0){
+        weight = 12;
+    }
+    let word_arr = ['AAA', 'BBB', 'CCC', 'DDD', 'EEE'];
+    let word = word_arr[Math.floor(Math.random() * word_arr.length)]
+    list.push([word, weight]);
+}
+let example_list = [
+    ['foo', 12],
+    ['bar', 6],
+    ['bar', 6],
+    ['bar', 6],
+    ['bar', 6],
+    ['bar', 6],
+    ['bar', 6],
+    ['bar', 6],
+    ['bar', 6],
+    ['bar', 6],
+    ['bar', 5],
+    ['bar', 1],
+]
 const TrendWordCloud  = ()=>{
     // console.log(window)
     useEffect(() => {
@@ -13,20 +37,7 @@ const TrendWordCloud  = ()=>{
                 document.querySelector('.WC canvas'),
                 // this.refs['my-canvas'],
                 {
-                    list: [
-                        ['foo', 12],
-                        ['bar', 6],
-                        ['bar', 6],
-                        ['bar', 6],
-                        ['bar', 6],
-                        ['bar', 6],
-                        ['bar', 6],
-                        ['bar', 6],
-                        ['bar', 6],
-                        ['bar', 6],
-                        ['bar', 5],
-                        ['bar', 1],
-                    ],
+                    list: list,
                     weightFactor: 5,
                     fontFamily: 'Times, serif',
                     color: function (word, weight) {

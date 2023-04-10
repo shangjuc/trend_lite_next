@@ -7,10 +7,15 @@ const TrendWordCloud = dynamic(() => import('../components/trend_word_cloud/twc'
 export default function wc() {
     let a = 'HHHHH'
     return (
-        <>
-            {(typeof window !== 'undefined') &&
-                <TrendWordCloud></TrendWordCloud>
-            }
+        <>  
+            <div className="twc-container flex flex-wrap w-full justify-center h-96 items-center">
+                <div className="flex w-full justify-center">
+                    <span>{a}</span>
+                </div>
+                {(typeof window !== 'undefined') &&
+                    <TrendWordCloud></TrendWordCloud>
+                }
+            </div>
         </>
     )
 }
