@@ -31,7 +31,7 @@ let example_list = [
 const TrendWordCloud  = ()=>{
     // console.log(window)
     useEffect(() => {
-        if (typeof window !== "undefined") {
+        if ( (typeof window !== "undefined") || true) {
             // Client-side-only code
             WordCloud(
                 document.querySelector('.WC canvas'),
@@ -46,7 +46,8 @@ const TrendWordCloud  = ()=>{
                     // rotateRatio: 0.5,
                     rotationSteps: 2,
                     backgroundColor: '#ffe0e0'
-                });
+                }
+            );
         }
     })
     return (

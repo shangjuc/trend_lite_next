@@ -1,7 +1,7 @@
 import React from "react";
-import dynamic from 'next/dynamic'
-
 // import TrendWordCloud from '../components/trend_word_cloud/twc';
+
+import dynamic from 'next/dynamic'
 const TrendWordCloud = dynamic(() => import('../components/trend_word_cloud/twc'), { ssr: false })
 
 export default function wc() {
@@ -12,7 +12,7 @@ export default function wc() {
                 <div className="flex w-full justify-center">
                     <span>{a}</span>
                 </div>
-                {(typeof window !== 'undefined') &&
+                {( (typeof window !== 'undefined') || true ) &&
                     <TrendWordCloud></TrendWordCloud>
                 }
             </div>
