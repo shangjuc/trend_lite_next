@@ -1,9 +1,9 @@
 import Image from 'next/image'
-import { Inter } from 'next/font/google'
+// import { Inter } from 'next/font/google'
 import Link from 'next/link'
 import Head from 'next/head'
 
-const inter = Inter({ subsets: ['latin'] })
+// const inter = Inter({ subsets: ['latin'] })
 const title_msg = `This is Index`
 
 export default function Home() {
