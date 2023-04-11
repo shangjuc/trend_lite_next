@@ -1,16 +1,20 @@
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import Link from 'next/link'
+import Head from 'next/head'
 
 const inter = Inter({ subsets: ['latin'] })
+const title_msg = `This is Index`
 
 export default function Home() {
   
   return (
+    <>
+    <Head>
+        <title>{title_msg}</title>
+    </Head>
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="aaa">
-        <a href="/aaa">AAA</a>
-      </div>
+      
       <ul>
         <li>
           <Link href="/">Home</Link>
@@ -22,7 +26,7 @@ export default function Home() {
           <Link href="/about">About Us</Link>
         </li>
         <li>
-          <Link href="/blog/hello-world">Blog Post</Link>
+          <Link href="/post/hello">Blog Post</Link>
         </li>
       </ul>
       {/* <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
@@ -139,5 +143,6 @@ export default function Home() {
         </a>
       </div> */}
     </main>
+    </>
   )
 }
