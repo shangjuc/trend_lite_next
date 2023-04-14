@@ -7,8 +7,7 @@ import Navbar from '@/components/navbar/navbar'
 // import dynamic from 'next/dynamic'
 // const TrendWordCloud = dynamic(() => import('../components/trend_word_cloud/twc'), { ssr: false })
 import WordCloudPanel from "@/components/trend_word_cloud/wc_panel";
-let a = 'HHaaa'
-const title_msg = `Word Cloud: ${a}`;
+const title_msg = `Word Cloud Demo`;
 
 export default function wc() {
     return (

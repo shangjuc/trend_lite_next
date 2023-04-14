@@ -16,12 +16,14 @@ export default function WordCloudPanel(props:{eid: string}) {
         <>  
             <div className="twc-container flex flex-wrap w-full justify-center h-96 items-center">
                 <div className="flex w-full justify-center">
-                    <span>This is WordCloud</span>
+                    <span>{eid}</span>
                 </div>
                 <div id={'js' + eid} className="mr-2">
+                    <span>{'js' + eid}</span>
                     <JsWordCloud eid={'js' + eid}></JsWordCloud>
                 </div>
                 <div id={'ts' + eid}>
+                    <span>{'ts' + eid}</span>
                     <TsWordCloud eid={'ts' + eid}></TsWordCloud>
                 </div>
             </div>
