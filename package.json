@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start --port 4500",
     "lint": "next lint",
+    "getpid": "sudo lsof -i -P | grep LISTEN | grep :4500",
+    "killport": "sudo kill -9 <PID>",
     "liveserver": "cd out && live-server --entry-file='./index.html'"
   },
   "dependencies": {
