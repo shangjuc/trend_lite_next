@@ -29,10 +29,9 @@ export default function ChatGPT() {
     function get_anwser(user_input:string, ai_role:string) {
         console.log(user_input);
         if (!user_input) return;
-        // let params = { q: user_input }
         // if (isLoading) return;
         let temp_history:I_Chat[] = chatHistoryData[ai_role as keyof I_ChatHistoryData];
-        if(temp_history[temp_history.length - 1].is_loading) return;
+        if(temp_history[temp_history.length - 1]?.is_loading) return;
         temp_history[temp_history.length - 1].is_loading = true;
         setChatHistoryData({
             ...chatHistoryData,
@@ -40,8 +39,25 @@ export default function ChatGPT() {
         });
         setIsLoading(true);
         setUserInput('');
+        // let headers = {
+        //     "Content-Type": "application/json",
+        //     "Accept": "application/json",
+        // }
+        let headers = {
+            // 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+            // "Accept": "application/json",
+            "Content-Type": "application/json",
+          }
+        let params = { q: user_input, role: ai_role }
 
-        fetch(`http://localhost:5566/api/chatgpt?q=${user_input}&role=${ai_role}`)
+        // fetch(`http://localhost:5566/api/chatgpt?q=${user_input}&role=${ai_role}`)
+        fetch(`http://localhost:5566/api/chatgpt`, {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(params),
+            // body:encodeURI(JSON.stringify(params)),
+
+        })
             .then(res => {
                 // console.log(res)
                 return res.json();
@@ -106,7 +122,7 @@ export default function ChatGPT() {
             </Head>
             <Navbar />
             <div className=" flex w-full justify-center items-center">
-                <div className="card flex flex-wrap justify-center w-1/2 h-auto p-10 border rounded border-white">
+                <div className="card flex flex-wrap justify-center w-1/2 sm:w-full md:w-2/3 lg:w-1/2 h-auto p-10 border rounded border-white">
                     <h1 className=" text-center mb-3">{aiRole === 'kotoha' ? '我婆琴葉' : aiRole.toUpperCase()}模擬器</h1>
                     <div className="btn-container flex w-full">
                         {['kotoha', 'gp', 'ai'].map((item,idx)=>{
