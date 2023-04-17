@@ -27,6 +27,8 @@
     "wordcloud": "^1.2.2"
   },
   "devDependencies": {
-    "@types/wordcloud": "^1.2.0"
+    "@types/wordcloud": "^1.2.0",
+    "sass": "^1.62.0",
+    "sass-loader": "^13.2.2"
   }
 }
