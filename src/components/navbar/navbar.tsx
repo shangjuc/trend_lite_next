@@ -5,7 +5,7 @@ export default function Navbar() {
 
     return (
         <>
-            <div className="flex w-full fixed border-b p-4 top-0 bg-slate-600">
+            <div className="flex w-full z-50 fixed border-b p-4 top-0 bg-slate-600">
                 <ul className=' flex'>
                     <li className=' mr-3'>
                         <Link href="/">Home</Link>

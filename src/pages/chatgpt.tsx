@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Navbar from '@/components/navbar/navbar'
 const title_msg = `ChatGPT test`;
@@ -9,9 +9,11 @@ interface I_Chat {
     is_loading: boolean;
 }
 interface I_ChatHistoryData {
-    kotoha: I_Chat[]|[];
-    gp: I_Chat[]|[];
-    ai: I_Chat[]|[];
+    [role:string]: I_Chat[] | [];
+}
+
+interface I_TranslationData {
+    [text: string]: string
 }
 
 export default function ChatGPT() {
@@ -19,12 +21,35 @@ export default function ChatGPT() {
 
     const [userInput, setUserInput] = useState<string>('');
     const [aiRole, setAiRole] = useState<string>('kotoha');
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [aiRoles, setAiRoles] = useState<string[] | []>([]);
     const [chatHistoryData, setChatHistoryData] = useState<I_ChatHistoryData>({
         'kotoha': [],
         'gp': [],
-        'ai': []
+        // 'ai': [],
+        'ushio_noa': [],
     })
+
+    useEffect(()=>{
+        let ai_roles:string[] = [];
+        Object.keys(chatHistoryData).forEach(role=>{
+            ai_roles.push(role);
+        })
+        setAiRoles(ai_roles);
+        console.log(chatHistoryData)
+    },[])
+
+    function translateWord(text: string): string {
+        let trans_tw: I_TranslationData = {
+            'kotoha': '琴葉',
+            'ushio_noa': '生塩ノア',
+            'gp': 'GP'
+        }
+        if (trans_tw[text as keyof I_TranslationData]) {
+            return trans_tw[text]
+        } else {
+            return text.toUpperCase()
+        }
+    }
 
     function submitUserInput(){
         let ai_role = aiRole;
@@ -35,7 +60,6 @@ export default function ChatGPT() {
 
         temp_history.push({ user_input: user_input, ai_answer: '(...)', is_loading:true });
         // chatHistoryData[temp_ai_role as keyof I_ChatHistoryData] = temp_history;
-        setIsLoading(true);
         setChatHistoryData({
             ...chatHistoryData,
             [ai_role as keyof I_ChatHistoryData]: temp_history
@@ -60,26 +84,32 @@ export default function ChatGPT() {
             // console.log(res)
             return res.json();
         })
-        .then(myjson => {
-            console.log(myjson)
-            if (typeof myjson?.answer === 'string') {
-                setIsLoading(false);
-                if (temp_history[temp_history.length - 1]){
-                    temp_history[temp_history.length - 1].ai_answer = myjson.answer;
-                    temp_history[temp_history.length - 1].is_loading = false;
-                }
-                setChatHistoryData({
-                    ...chatHistoryData,
-                    [ai_role as keyof I_ChatHistoryData]: temp_history
-                });
-            } else {
-                setIsLoading(false);
+        .then(myJson => {
+            console.log(myJson)
+            let answer:string = myJson?.answer || ''; 
+            
+            if (temp_history[temp_history.length - 1]) {
+                temp_history[temp_history.length - 1].ai_answer = answer;
+                temp_history[temp_history.length - 1].is_loading = false;
             }
+            setChatHistoryData({
+                ...chatHistoryData,
+                [ai_role as keyof I_ChatHistoryData]: temp_history
+            });
         })
         .catch(err=>{
             console.log(err)
-            temp_history[temp_history.length - 1].is_loading = false;
+            if (temp_history[temp_history.length - 1]) {
+                temp_history[temp_history.length - 1].ai_answer = '不好意思，請再問一次><';
+                temp_history[temp_history.length - 1].is_loading = false;
+            }
+            setChatHistoryData({
+                ...chatHistoryData,
+                [ai_role as keyof I_ChatHistoryData]: temp_history
+            });
         })
+
+       
         // temp_history[temp_history.length - 1].is_loading = true;
     }
 
@@ -116,21 +146,23 @@ export default function ChatGPT() {
             </Head>
             <Navbar />
             <div className=" flex w-full justify-center items-center">
-                <div className="card flex flex-wrap justify-center w-1/2 sm:w-full md:w-2/3 lg:w-1/2 h-auto p-10 border rounded border-white">
-                    <h1 className=" text-center mb-3">{aiRole === 'kotoha' ? '我婆琴葉' : aiRole.toUpperCase()}模擬器</h1>
+                <div className="card flex flex-wrap justify-center w-1/2 sm:w-full md:w-2/3 lg:w-1/2 h-auto px-10 border rounded border-white">
+                    <div className="sticky top-0 pt-6 w-full bg-black ">
+
+                        <h1 className=" text-center mb-3">{aiRole === 'kotoha' ? '我婆琴葉' : translateWord(aiRole)}模擬器</h1>
                     <div className="btn-container flex w-full">
-                        {['kotoha', 'gp', 'ai'].map((item,idx)=>{
-                            return <button key={idx} className={ (aiRole===item? ' bg-slate-500': '') + " border rounded px-5 py-1 mr-1"}  onClick={() => { selectAiRole(item) }}>{item.toUpperCase()}</button>
+                            {aiRoles.map((item,idx)=>{
+                                return <button key={idx} className={(aiRole === item ? ' bg-slate-500' : '') + " border rounded px-5 py-1 mr-1"} onClick={() => { selectAiRole(item) }}>{translateWord(item)}</button>
                         })}
+                    </div>
                     </div>
 
 
-                    {chatHistoryData[aiRole as keyof I_ChatHistoryData].map((item, index) =>
-
-                        true &&
+                    {chatHistoryData[aiRole as keyof I_ChatHistoryData] && 
+                        chatHistoryData[aiRole as keyof I_ChatHistoryData].map((item, index) =>
                         <div key={index} className="w-full border-b py-10" >
                             <p>Q: {item.user_input}</p>
-                            <p>{aiRole.toLocaleUpperCase()}: {item.ai_answer}</p>
+                                <p>{translateWord(aiRole)}: {item.ai_answer}</p>
 
                         </div>
                     )}
