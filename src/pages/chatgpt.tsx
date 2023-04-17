@@ -15,6 +15,7 @@ interface I_ChatHistoryData {
 }
 
 export default function ChatGPT() {
+    // console.log('chat gpt')
 
     const [userInput, setUserInput] = useState<string>('');
     const [aiRole, setAiRole] = useState<string>('kotoha');
@@ -25,24 +26,21 @@ export default function ChatGPT() {
         'ai': []
     })
 
-
-    function get_anwser(user_input:string, ai_role:string) {
-        console.log(user_input);
+    function submitUserInput(){
+        let ai_role = aiRole;
+        let user_input = userInput;
         if (!user_input) return;
-        // if (isLoading) return;
         let temp_history:I_Chat[] = chatHistoryData[ai_role as keyof I_ChatHistoryData];
         if(temp_history[temp_history.length - 1]?.is_loading) return;
-        temp_history[temp_history.length - 1].is_loading = true;
+
+        temp_history.push({ user_input: user_input, ai_answer: '(...)', is_loading:true });
+        // chatHistoryData[temp_ai_role as keyof I_ChatHistoryData] = temp_history;
+        setIsLoading(true);
         setChatHistoryData({
             ...chatHistoryData,
             [ai_role as keyof I_ChatHistoryData]: temp_history
         });
-        setIsLoading(true);
         setUserInput('');
-        // let headers = {
-        //     "Content-Type": "application/json",
-        //     "Accept": "application/json",
-        // }
         let headers = {
             // 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
             // "Accept": "application/json",
@@ -58,25 +56,33 @@ export default function ChatGPT() {
             // body:encodeURI(JSON.stringify(params)),
 
         })
-            .then(res => {
-                // console.log(res)
-                return res.json();
-            })
-            .then(myjson => {
-                console.log(myjson)
-                if (typeof myjson?.answer === 'string') {
-                    setIsLoading(false);
+        .then(res => {
+            // console.log(res)
+            return res.json();
+        })
+        .then(myjson => {
+            console.log(myjson)
+            if (typeof myjson?.answer === 'string') {
+                setIsLoading(false);
+                if (temp_history[temp_history.length - 1]){
                     temp_history[temp_history.length - 1].ai_answer = myjson.answer;
                     temp_history[temp_history.length - 1].is_loading = false;
-                    setChatHistoryData({
-                        ...chatHistoryData,
-                        [ai_role as keyof I_ChatHistoryData]: temp_history
-                    });
-                } else {
-                    setIsLoading(false);
                 }
-            })
+                setChatHistoryData({
+                    ...chatHistoryData,
+                    [ai_role as keyof I_ChatHistoryData]: temp_history
+                });
+            } else {
+                setIsLoading(false);
+            }
+        })
+        .catch(err=>{
+            console.log(err)
+            temp_history[temp_history.length - 1].is_loading = false;
+        })
+        // temp_history[temp_history.length - 1].is_loading = true;
     }
+
 
     function handleChange(event: any) {
         setUserInput(event.target.value);
@@ -87,24 +93,12 @@ export default function ChatGPT() {
         // console.log(e);
         // setUserInput(e.target.value);
         if (event.key === 'Enter') {
-            let ai_role = aiRole;
-            let user_input = userInput;
-            if (!user_input) return;
-            let temp_history:I_Chat[] = chatHistoryData[ai_role as keyof I_ChatHistoryData];
-            if(temp_history[temp_history.length - 1]?.is_loading) return;
-
-            temp_history.push({ user_input: user_input, ai_answer: '(...)', is_loading:false });
-            // chatHistoryData[temp_ai_role as keyof I_ChatHistoryData] = temp_history;
-            setChatHistoryData({
-                ...chatHistoryData,
-                [ai_role as keyof I_ChatHistoryData]: temp_history
-            });
-            // console.log(chatHistoryData)
-            get_anwser(user_input, ai_role);
-            event.target.value = '';
+            // event.target.value = '';
+            submitUserInput()
         }
 
     }
+
 
     const selectAiRole = (role:string)=>{
         // let temp_history:I_Chat[] = chatHistoryData[role as keyof I_ChatHistoryData];
@@ -144,8 +138,8 @@ export default function ChatGPT() {
                     <div className="user-input flex flex-wrap w-full justify-center items-center py-10">
                         <input type="text" placeholder="輸入想問的問題" className=" w-full text-gray-500 mb-5 h-10 rounded px-2"
                             onChange={handleChange}
-                            onKeyDown={handleKeyDown} />
-                        <button className="w-full border p-2 rounded" onClick={()=>get_anwser(userInput, aiRole)}>送出</button>
+                            onKeyDown={handleKeyDown} value={userInput}/>
+                        <button className="w-full border p-2 rounded" onClick={()=>submitUserInput()}>送出</button>
                     </div>
 
 
