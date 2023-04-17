@@ -86,6 +86,13 @@ const TrendWordCloud = dynamic(() => import('../components/trend_word_cloud/twc'
 可能是node version的問題，改用node v16以上的版本。使用wsl並安裝相應版本，或是用nvm去切換版本。
 
 
+## scss支援性問題
+
+NextJS 13.1.4 breaks when adding SCSS support "Cannot find module next/dist/compiled/sass-loader/fibers.js"
+https://stackoverflow.com/questions/75195099/nextjs-13-1-4-breaks-when-adding-scss-support-cannot-find-module-next-dist-comp
+
+可能是node version的問題，改用node v16以上的版本。使用wsl並安裝相應版本，或是用nvm去切換版本。
+
 
 # 官方文件
 

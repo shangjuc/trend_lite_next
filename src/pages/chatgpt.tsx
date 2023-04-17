@@ -153,7 +153,7 @@ export default function ChatGPT() {
                     <div className="sticky top-0 pt-6 w-full bg-black ">
 
                         <h1 className=" text-center mb-3">{aiRole === 'kotoha' ? '我婆琴葉' : translateWord(aiRole)}模擬器</h1>
-                        <Loading />
+                        {/* <Loading /> */}
                         <div className="btn-container flex w-full">
                             {aiRoles.map((item, idx) => {
                                 return <button key={idx} className={(aiRole === item ? ' bg-slate-500' : '') + " border rounded px-5 py-1 mr-1"} onClick={() => { selectAiRole(item) }}>{translateWord(item)}</button>
