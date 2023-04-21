@@ -165,7 +165,7 @@ export default function ChatGPT() {
                 <title>{title_msg}</title>
             </Head>
             <Navbar />
-            <div className=" flex w-full justify-center items-center">
+            <div className=" flex w-full justify-center items-center px-5">
 
                 <div className="card flex flex-wrap justify-center w-full md:w-[768px] min-w-[300px] h-auto px-5 sm:px-10 border rounded border-white">
                     <div className="sticky top-0 pt-6 w-full bg-black ">
