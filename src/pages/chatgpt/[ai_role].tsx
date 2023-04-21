@@ -166,7 +166,7 @@ export default function ChatGPT() {
             <Navbar />
             <div className=" flex w-full justify-center items-center">
 
-                <div className="card flex flex-wrap justify-center w-1/2 sm:w-full md:w-2/3 lg:w-1/2 h-auto px-10 border rounded border-white">
+                <div className="card flex flex-wrap justify-center w-full md:w-[768px] min-w-[300px] h-auto px-5 sm:px-10 border rounded border-white">
                     <div className="sticky top-0 pt-6 w-full bg-black ">
                         {/* <h1>{path_role}</h1> */}
                         <h1 className=" text-center mb-3">{aiRole === 'kotoha' ? '我婆琴葉' : translateWord(aiRole)}模擬器</h1>
