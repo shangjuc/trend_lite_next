@@ -24,9 +24,15 @@ export default function ChatGPT() {
     // console.log('chat gpt')
     const router = useRouter();
     const path_role = router.asPath.split("/")[2];
-    const title_msg = `ChatGPT: ${path_role}`
-        
-
+    
+    const trans_tw:I_TranslationData = {
+        'kotoha': '琴葉',
+        'ushio_noa': '生塩ノア',
+        'gp': 'GP',
+        'lawbot': 'Law Bot',
+        'qsh_helper': 'QSH語法小幫手',
+    }
+    const [title_msg, setTitleMsg] = useState(`ChatGPT: ${translateWord(path_role)}`) 
     const [userInput, setUserInput] = useState<string>('');
     const [aiRole, setAiRole] = useState<string>('kotoha');
     const [aiRoles, setAiRoles] = useState<string[] | []>([]);
@@ -38,6 +44,7 @@ export default function ChatGPT() {
         'qsh_helper': [],
         'ai': [],
     })
+    
 
     useEffect(() => {
         let ai_roles: string[] = [];
@@ -51,18 +58,12 @@ export default function ChatGPT() {
     useEffect(()=>{
         if(path_role in chatHistoryData){
             setAiRole(path_role)
+            setTitleMsg(`ChatGPT: ${translateWord(path_role)}`)
         }
-        console.log(aiRole, path_role)
+        // console.log(aiRole, path_role)
     },[path_role])
 
     function translateWord(text: string): string {
-        let trans_tw: I_TranslationData = {
-            'kotoha': '琴葉',
-            'ushio_noa': '生塩ノア',
-            'gp': 'GP',
-            'lawbot': 'Law Bot',
-            'qsh_helper': 'QSH語法小幫手',
-        }
         if (trans_tw[text as keyof I_TranslationData]) {
             return trans_tw[text]
         } else {
