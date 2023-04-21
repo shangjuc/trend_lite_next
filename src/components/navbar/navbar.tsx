@@ -14,7 +14,7 @@ export default function Navbar() {
                         <Link href="/word-cloud">WordCloud</Link>
                     </li>
                     <li className=' mr-3'>
-                        <Link href="/chatgpt">ChatGPT</Link>
+                        <Link href="/chatgpt/ai">ChatGPT</Link>
                     </li>
                     <li className=' mr-3'>
                         <Link href="/post/hello">Blog Post</Link>

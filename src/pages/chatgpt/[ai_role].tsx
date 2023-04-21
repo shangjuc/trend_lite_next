@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Navbar from '@/components/navbar/navbar';
 import Loading from "@/components/_shared/loading/loading";
+import Link from 'next/link';
+import { useRouter } from "next/router";
 
-const title_msg = `ChatGPT test`;
+// const title_msg = `ChatGPT test`;
 
 interface I_Chat {
     user_input: string;
@@ -20,6 +22,10 @@ interface I_TranslationData {
 
 export default function ChatGPT() {
     // console.log('chat gpt')
+    const router = useRouter();
+    const path_role = router.asPath.split("/")[2];
+    const title_msg = `ChatGPT: ${path_role}`
+        
 
     const [userInput, setUserInput] = useState<string>('');
     const [aiRole, setAiRole] = useState<string>('kotoha');
@@ -29,6 +35,7 @@ export default function ChatGPT() {
         'gp': [],
         'ushio_noa': [],
         'lawbot': [],
+        'qsh_helper': [],
         'ai': [],
     })
 
@@ -38,15 +45,23 @@ export default function ChatGPT() {
             ai_roles.push(role);
         })
         setAiRoles(ai_roles);
-        // console.log(chatHistoryData)
+        
     }, [])
+
+    useEffect(()=>{
+        if(path_role in chatHistoryData){
+            setAiRole(path_role)
+        }
+        console.log(aiRole, path_role)
+    },[path_role])
 
     function translateWord(text: string): string {
         let trans_tw: I_TranslationData = {
             'kotoha': '琴葉',
             'ushio_noa': '生塩ノア',
             'gp': 'GP',
-            'lawbot': 'Law Bot'
+            'lawbot': 'Law Bot',
+            'qsh_helper': 'QSH語法小幫手',
         }
         if (trans_tw[text as keyof I_TranslationData]) {
             return trans_tw[text]
@@ -153,12 +168,13 @@ export default function ChatGPT() {
 
                 <div className="card flex flex-wrap justify-center w-1/2 sm:w-full md:w-2/3 lg:w-1/2 h-auto px-10 border rounded border-white">
                     <div className="sticky top-0 pt-6 w-full bg-black ">
-
+                        {/* <h1>{path_role}</h1> */}
                         <h1 className=" text-center mb-3">{aiRole === 'kotoha' ? '我婆琴葉' : translateWord(aiRole)}模擬器</h1>
                         {/* <Loading /> */}
-                        <div className="btn-container flex w-full">
+                        <div className="btn-container flex w-full flex-wrap">
                             {aiRoles.map((item, idx) => {
-                                return <button key={idx} className={(aiRole === item ? ' bg-slate-500' : '') + " border rounded px-5 py-1 mr-1"} onClick={() => { selectAiRole(item) }}>{translateWord(item)}</button>
+                                return <Link href={"/chatgpt/" + item} key={idx} className={(aiRole === item ? ' bg-slate-500' : '') + " border rounded px-5 py-1 mr-1 mb-1"} onClick={() => { selectAiRole(item) }}>{translateWord(item)}</Link>
+                                
                             })}
                         </div>
                     </div>
@@ -167,17 +183,23 @@ export default function ChatGPT() {
                     {chatHistoryData[aiRole as keyof I_ChatHistoryData] &&
                         chatHistoryData[aiRole as keyof I_ChatHistoryData].map((item, index) =>
                             <div key={index} className="w-full border-b py-10" >
-                                <div>Q: {item.user_input}</div>
-                                <div className="mt-8">
+                                <div>
+                                    <p>Q: {item.user_input}</p>
+                                    <p className=" text-gray-500 text-sm">(字數：{item.user_input.length})</p>
+                                </div>
+                                <div className="mt-8 break-words">
                                     <span className="mr-1">{translateWord(aiRole)}:</span> 
-                                    {item.ai_answer === '(...)' ? <Loading /> : item.ai_answer}
+                                    {item.ai_answer === '(...)' ? 
+                                        <Loading /> : item.ai_answer
+                                    }
+                                    <p className=" text-gray-500 text-sm">(字數：{item.ai_answer.length})</p>
                                 </div>
                             </div>
                         )}
                     {/* {isLoading && <div className="w-full">Loading...</div>} */}
                     <div className="user-input flex flex-wrap w-full justify-center items-center py-10">
                         <div className="w-full mb-2">目前字數：{userInput.length}</div>
-                        <textarea placeholder="輸入想問的問題" className=" w-full text-gray-500 mb-5 h-96 rounded p-2"
+                        <textarea placeholder="輸入想問的問題" className=" w-full text-gray-500 mb-5 h-20 rounded p-2"
                             onChange={handleChange}
                             onKeyDown={handleKeyDown} value={userInput} />
                         {/* <input type="text" placeholder="輸入想問的問題" className=" w-full text-gray-500 mb-5 h-10 rounded px-2"
