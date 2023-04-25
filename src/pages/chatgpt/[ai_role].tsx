@@ -25,35 +25,37 @@ const ChatWithAi = () =>{
     const router = useRouter();
     const path_role = router.asPath.split("/")[2];
 
-    const trans_tw: I_TranslationData = {
+    const [trans_tw, setTransTw] = useState<I_TranslationData>({
         'kotoha': '琴葉',
-        'ushio_noa': '生塩ノア',
-        'gp': 'GP',
-        'lawbot': 'Law Bot',
-        'qsh_helper': 'QSH語法小幫手',
-    }
+        // 'ushio_noa': '生塩ノア',
+        // 'gp': 'GP',
+        // 'lawbot': 'Law Bot',
+        // 'qsh_helper': 'QSH語法小幫手',
+    })
 
-    const [enterIsInput, setEnterIsInput] = useState(false);
+    const [enterIsInput, setEnterIsInput] = useState(true);
     const [title_msg, setTitleMsg] = useState(`ChatGPT: ${translateWord(path_role)}`)
     const [userInput, setUserInput] = useState<string>('');
     const [aiRole, setAiRole] = useState<string>('kotoha');
     const [aiRoles, setAiRoles] = useState<string[] | []>([]);
     const [chatHistoryData, setChatHistoryData] = useState<I_ChatHistoryData>({
         'kotoha': [],
-        'gp': [],
-        'ushio_noa': [],
-        'lawbot': [],
-        'qsh_helper': [],
         'ai': [],
+        // 'gp': [],
+        // 'ushio_noa': [],
+        // 'lawbot': [],
+        // 'qsh_helper': [],
     })
 
 
     useEffect(() => {
-        let ai_roles: string[] = [];
-        Object.keys(chatHistoryData).forEach(role => {
-            ai_roles.push(role);
-        })
-        setAiRoles(ai_roles);
+
+        api_get_ai_roles()
+        // let ai_roles: string[] = [];
+        // Object.keys(chatHistoryData).forEach(role => {
+        //     ai_roles.push(role);
+        // })
+        // setAiRoles(ai_roles);
 
     }, [])
 
@@ -71,6 +73,44 @@ const ChatWithAi = () =>{
         } else {
             return text.toUpperCase()
         }
+    }
+
+    function api_get_ai_roles(){
+        let headers = {
+            "Content-Type": "application/json",
+        }
+        // let params = { q: '', role: '' }
+        fetch(`http://localhost:5566/api/chatgpt/ai_roles`, {
+            method: "GET",
+            headers: headers,
+            // body: JSON.stringify(params),
+        })
+        .then(res => {
+            // console.log(res)
+            return res.json();
+        })
+        .then((myJson: any[]) => {
+            let ai_roles: string[] = [];
+            let nob = { ...chatHistoryData }
+            let ntrans = { ...trans_tw }
+            myJson.forEach((obj) => {
+                console.log(obj.role);
+                nob = {
+                    ...nob,
+                    [obj.role]: []
+                }
+                ntrans = {
+                    ...ntrans,
+                    [obj.role]: obj.name
+                }
+                ai_roles.push(obj.role);
+            })
+            console.log(nob, ntrans)
+            setAiRoles(ai_roles);
+            setChatHistoryData(nob);
+            setTransTw(ntrans);
+            // console.log(chatHistoryData)
+        })
     }
 
     function submitUserInput() {
@@ -102,34 +142,36 @@ const ChatWithAi = () =>{
             // body:encodeURI(JSON.stringify(params)),
 
         })
-            .then(res => {
-                // console.log(res)
-                return res.json();
-            })
-            .then(myJson => {
-                console.log(myJson)
-                let answer: string = myJson?.answer || '';
+        .then(res => {
+            // console.log(res)
+            return res.json();
+        })
+        .then(myJson => {
+            console.log(myJson)
+            let answer: string = myJson?.answer || '';
 
-                if (temp_history[temp_history.length - 1]) {
-                    temp_history[temp_history.length - 1].ai_answer = answer;
-                    temp_history[temp_history.length - 1].is_loading = false;
-                }
-                setChatHistoryData({
-                    ...chatHistoryData,
-                    [ai_role as keyof I_ChatHistoryData]: temp_history
-                });
-            })
-            .catch(err => {
-                console.log(err)
-                if (temp_history[temp_history.length - 1]) {
-                    temp_history[temp_history.length - 1].ai_answer = '不好意思，請再問一次><';
-                    temp_history[temp_history.length - 1].is_loading = false;
-                }
-                setChatHistoryData({
-                    ...chatHistoryData,
-                    [ai_role as keyof I_ChatHistoryData]: temp_history
-                });
-            })
+            if (temp_history[temp_history.length - 1]) {
+                temp_history[temp_history.length - 1].ai_answer = answer;
+                temp_history[temp_history.length - 1].is_loading = false;
+            }
+            setChatHistoryData({
+                ...chatHistoryData,
+                [ai_role as keyof I_ChatHistoryData]: temp_history
+            });
+            console.log(chatHistoryData)
+
+        })
+        .catch(err => {
+            console.log(err)
+            if (temp_history[temp_history.length - 1]) {
+                temp_history[temp_history.length - 1].ai_answer = '不好意思，請再問一次><';
+                temp_history[temp_history.length - 1].is_loading = false;
+            }
+            setChatHistoryData({
+                ...chatHistoryData,
+                [ai_role as keyof I_ChatHistoryData]: temp_history
+            });
+        })
 
 
         // temp_history[temp_history.length - 1].is_loading = true;
