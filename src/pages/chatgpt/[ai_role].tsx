@@ -20,19 +20,21 @@ interface I_TranslationData {
     [text: string]: string
 }
 
-export default function ChatGPT() {
+const ChatWithAi = () =>{
     // console.log('chat gpt')
     const router = useRouter();
     const path_role = router.asPath.split("/")[2];
-    
-    const trans_tw:I_TranslationData = {
+
+    const trans_tw: I_TranslationData = {
         'kotoha': '琴葉',
         'ushio_noa': '生塩ノア',
         'gp': 'GP',
         'lawbot': 'Law Bot',
         'qsh_helper': 'QSH語法小幫手',
     }
-    const [title_msg, setTitleMsg] = useState(`ChatGPT: ${translateWord(path_role)}`) 
+
+    const [enterIsInput, setEnterIsInput] = useState(false);
+    const [title_msg, setTitleMsg] = useState(`ChatGPT: ${translateWord(path_role)}`)
     const [userInput, setUserInput] = useState<string>('');
     const [aiRole, setAiRole] = useState<string>('kotoha');
     const [aiRoles, setAiRoles] = useState<string[] | []>([]);
@@ -44,7 +46,7 @@ export default function ChatGPT() {
         'qsh_helper': [],
         'ai': [],
     })
-    
+
 
     useEffect(() => {
         let ai_roles: string[] = [];
@@ -52,16 +54,16 @@ export default function ChatGPT() {
             ai_roles.push(role);
         })
         setAiRoles(ai_roles);
-        
+
     }, [])
 
-    useEffect(()=>{
-        if(path_role in chatHistoryData){
+    useEffect(() => {
+        if (path_role in chatHistoryData) {
             setAiRole(path_role)
             setTitleMsg(`ChatGPT: ${translateWord(path_role)}`)
         }
         // console.log(aiRole, path_role)
-    },[path_role])
+    }, [path_role])
 
     function translateWord(text: string): string {
         if (trans_tw[text as keyof I_TranslationData]) {
@@ -136,15 +138,21 @@ export default function ChatGPT() {
 
     function handleChange(event: any) {
         setUserInput(event.target.value);
+        // console.log(event.code, event.target.value)
 
     }
-    function handleKeyDown(event: any) {
 
-        // console.log(e);
-        // setUserInput(e.target.value);
-        if (event.key === 'Enter') {
-            // event.target.value = '';
-            // submitUserInput()
+    function handleKeyDown(event: any) {
+        // setUserInput(String(event.target.value));
+        // console.log(event.key, event.target.value)
+
+        if (event.key === 'Enter' && enterIsInput) {
+            submitUserInput()
+            setTimeout(() => {
+                event.target.value = ''.trim();
+                setUserInput(''.trim());
+                
+            }, 100);
         }
 
     }
@@ -175,7 +183,7 @@ export default function ChatGPT() {
                         <div className="btn-container flex w-full flex-wrap">
                             {aiRoles.map((item, idx) => {
                                 return <Link href={"/chatgpt/" + item} key={idx} className={(aiRole === item ? ' bg-slate-500' : '') + " border rounded px-5 py-1 mr-1 mb-1"} onClick={() => { selectAiRole(item) }}>{translateWord(item)}</Link>
-                                
+
                             })}
                         </div>
                     </div>
@@ -189,8 +197,8 @@ export default function ChatGPT() {
                                     <p className=" text-gray-500 text-sm">(字數：{item.user_input.length})</p>
                                 </div>
                                 <div className="mt-8 break-words">
-                                    <span className="mr-1">{translateWord(aiRole)}:</span> 
-                                    {item.ai_answer === '(...)' ? 
+                                    <span className="mr-1">{translateWord(aiRole)}:</span>
+                                    {item.ai_answer === '(...)' ?
                                         <Loading /> : item.ai_answer
                                     }
                                     <p className=" text-gray-500 text-sm">(字數：{item.ai_answer.length})</p>
@@ -199,13 +207,17 @@ export default function ChatGPT() {
                         )}
                     {/* {isLoading && <div className="w-full">Loading...</div>} */}
                     <div className="user-input flex flex-wrap w-full justify-center items-center py-10">
-                        <div className="w-full mb-2">目前字數：{userInput.length}</div>
+                        <div className="w-full mb-2 flex ">
+                            <span>目前字數：{userInput.length}</span> 
+                            <button className="ml-auto" onClick={() => { setEnterIsInput(!enterIsInput) }}>
+                                <input type="checkbox" name="" id="" checked={enterIsInput} onChange={() => { }}/>
+                                按Enter即送出
+                            </button>
+                        </div>
                         <textarea placeholder="輸入想問的問題" className=" w-full text-gray-500 mb-5 h-20 rounded p-2"
                             onChange={handleChange}
-                            onKeyDown={handleKeyDown} value={userInput} />
-                        {/* <input type="text" placeholder="輸入想問的問題" className=" w-full text-gray-500 mb-5 h-10 rounded px-2"
-                            onChange={handleChange}
-                            onKeyDown={handleKeyDown} value={userInput} /> */}
+                            onKeyDown={handleKeyDown} 
+                            value={userInput} />
                         <button className="w-full border p-2 rounded" onClick={() => submitUserInput()}>送出</button>
                     </div>
 
@@ -223,3 +235,5 @@ export default function ChatGPT() {
         </>
     )
 }
+
+export default ChatWithAi;
