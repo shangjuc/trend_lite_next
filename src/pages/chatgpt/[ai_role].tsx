@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Navbar from '@/components/navbar/navbar';
 import Loading from "@/components/_shared/loading/loading";
+import Link from 'next/link';
+import { useRouter } from "next/router";
 
-const title_msg = `ChatGPT test`;
+// const title_msg = `ChatGPT test`;
 
 interface I_Chat {
     user_input: string;
@@ -20,16 +22,29 @@ interface I_TranslationData {
 
 export default function ChatGPT() {
     // console.log('chat gpt')
-
+    const router = useRouter();
+    const path_role = router.asPath.split("/")[2];
+    
+    const trans_tw:I_TranslationData = {
+        'kotoha': '琴葉',
+        'ushio_noa': '生塩ノア',
+        'gp': 'GP',
+        'lawbot': 'Law Bot',
+        'qsh_helper': 'QSH語法小幫手',
+    }
+    const [title_msg, setTitleMsg] = useState(`ChatGPT: ${translateWord(path_role)}`) 
     const [userInput, setUserInput] = useState<string>('');
     const [aiRole, setAiRole] = useState<string>('kotoha');
     const [aiRoles, setAiRoles] = useState<string[] | []>([]);
     const [chatHistoryData, setChatHistoryData] = useState<I_ChatHistoryData>({
         'kotoha': [],
         'gp': [],
-        // 'ai': [],
         'ushio_noa': [],
+        'lawbot': [],
+        'qsh_helper': [],
+        'ai': [],
     })
+    
 
     useEffect(() => {
         let ai_roles: string[] = [];
@@ -37,15 +52,18 @@ export default function ChatGPT() {
             ai_roles.push(role);
         })
         setAiRoles(ai_roles);
-        console.log(chatHistoryData)
+        
     }, [])
 
-    function translateWord(text: string): string {
-        let trans_tw: I_TranslationData = {
-            'kotoha': '琴葉',
-            'ushio_noa': '生塩ノア',
-            'gp': 'GP'
+    useEffect(()=>{
+        if(path_role in chatHistoryData){
+            setAiRole(path_role)
+            setTitleMsg(`ChatGPT: ${translateWord(path_role)}`)
         }
+        // console.log(aiRole, path_role)
+    },[path_role])
+
+    function translateWord(text: string): string {
         if (trans_tw[text as keyof I_TranslationData]) {
             return trans_tw[text]
         } else {
@@ -126,7 +144,7 @@ export default function ChatGPT() {
         // setUserInput(e.target.value);
         if (event.key === 'Enter') {
             // event.target.value = '';
-            submitUserInput()
+            // submitUserInput()
         }
 
     }
@@ -147,16 +165,17 @@ export default function ChatGPT() {
                 <title>{title_msg}</title>
             </Head>
             <Navbar />
-            <div className=" flex w-full justify-center items-center">
+            <div className=" flex w-full justify-center items-center px-5">
 
-                <div className="card flex flex-wrap justify-center w-1/2 sm:w-full md:w-2/3 lg:w-1/2 h-auto px-10 border rounded border-white">
+                <div className="card flex flex-wrap justify-center w-full md:w-[768px] min-w-[300px] h-auto px-5 sm:px-10 border rounded border-white">
                     <div className="sticky top-0 pt-6 w-full bg-black ">
-
+                        {/* <h1>{path_role}</h1> */}
                         <h1 className=" text-center mb-3">{aiRole === 'kotoha' ? '我婆琴葉' : translateWord(aiRole)}模擬器</h1>
                         {/* <Loading /> */}
-                        <div className="btn-container flex w-full">
+                        <div className="btn-container flex w-full flex-wrap">
                             {aiRoles.map((item, idx) => {
-                                return <button key={idx} className={(aiRole === item ? ' bg-slate-500' : '') + " border rounded px-5 py-1 mr-1"} onClick={() => { selectAiRole(item) }}>{translateWord(item)}</button>
+                                return <Link href={"/chatgpt/" + item} key={idx} className={(aiRole === item ? ' bg-slate-500' : '') + " border rounded px-5 py-1 mr-1 mb-1"} onClick={() => { selectAiRole(item) }}>{translateWord(item)}</Link>
+                                
                             })}
                         </div>
                     </div>
@@ -165,17 +184,28 @@ export default function ChatGPT() {
                     {chatHistoryData[aiRole as keyof I_ChatHistoryData] &&
                         chatHistoryData[aiRole as keyof I_ChatHistoryData].map((item, index) =>
                             <div key={index} className="w-full border-b py-10" >
-                                <p>Q: {item.user_input}</p>
-                                <p className="">
-                                    <span className="mr-1">{translateWord(aiRole)}:</span> {item.ai_answer === '(...)' ? <Loading /> : item.ai_answer}
-                                </p>
+                                <div>
+                                    <p>Q: {item.user_input}</p>
+                                    <p className=" text-gray-500 text-sm">(字數：{item.user_input.length})</p>
+                                </div>
+                                <div className="mt-8 break-words">
+                                    <span className="mr-1">{translateWord(aiRole)}:</span> 
+                                    {item.ai_answer === '(...)' ? 
+                                        <Loading /> : item.ai_answer
+                                    }
+                                    <p className=" text-gray-500 text-sm">(字數：{item.ai_answer.length})</p>
+                                </div>
                             </div>
                         )}
                     {/* {isLoading && <div className="w-full">Loading...</div>} */}
                     <div className="user-input flex flex-wrap w-full justify-center items-center py-10">
-                        <input type="text" placeholder="輸入想問的問題" className=" w-full text-gray-500 mb-5 h-10 rounded px-2"
+                        <div className="w-full mb-2">目前字數：{userInput.length}</div>
+                        <textarea placeholder="輸入想問的問題" className=" w-full text-gray-500 mb-5 h-20 rounded p-2"
                             onChange={handleChange}
                             onKeyDown={handleKeyDown} value={userInput} />
+                        {/* <input type="text" placeholder="輸入想問的問題" className=" w-full text-gray-500 mb-5 h-10 rounded px-2"
+                            onChange={handleChange}
+                            onKeyDown={handleKeyDown} value={userInput} /> */}
                         <button className="w-full border p-2 rounded" onClick={() => submitUserInput()}>送出</button>
                     </div>
 
