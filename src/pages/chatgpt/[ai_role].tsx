@@ -187,14 +187,31 @@ const ChatWithAi = () =>{
     function handleKeyDown(event: any) {
         // setUserInput(String(event.target.value));
         // console.log(event.key, event.target.value)
-
+        
+        
         if (event.key === 'Enter' && enterIsInput) {
-            submitUserInput()
-            setTimeout(() => {
-                event.target.value = ''.trim();
-                setUserInput(''.trim());
-                
-            }, 100);
+
+            let aaa = chatHistoryData[aiRole as keyof I_ChatHistoryData].length - 1;
+
+            if (aaa >= 0 && chatHistoryData[aiRole as keyof I_ChatHistoryData][aaa].ai_answer === '(...)') {
+
+                return
+            }　else if (userInput.trim().length === 0) {
+                setTimeout(() => {
+                    event.target.value = ''.trim();
+                    setUserInput(''.trim());
+
+                }, 0);
+                // return;  
+            } else {
+
+                submitUserInput()
+                setTimeout(() => {
+                    event.target.value = ''.trim();
+                    setUserInput(''.trim());
+                    
+                }, 100);
+            }
         }
 
     }
