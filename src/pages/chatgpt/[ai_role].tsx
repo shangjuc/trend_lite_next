@@ -148,7 +148,15 @@ const ChatWithAi = () =>{
         })
         .then(myJson => {
             console.log(myJson)
-            let answer: string = myJson?.answer || '';
+            let answer: string = '';
+
+            if(myJson && myJson.answer){
+                if(typeof myJson.answer === 'string'){
+                    answer = myJson.answer || '';
+                } else if (myJson.answer.error && typeof myJson.answer.error.message === 'string'){
+                    answer = myJson.answer.error.message;
+                }
+            }
 
             if (temp_history[temp_history.length - 1]) {
                 temp_history[temp_history.length - 1].ai_answer = answer;
