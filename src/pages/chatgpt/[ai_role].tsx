@@ -111,6 +111,9 @@ const ChatWithAi = () =>{
             setTransTw(ntrans);
             // console.log(chatHistoryData)
         })
+        .catch((err)=>{
+            console.log(err)
+        })
     }
 
     function submitUserInput() {
