@@ -7,7 +7,7 @@ export default function WordCloudPanel(props:{eid: string}) {
 
     const [eid, setEid] = useState('wordcloud-' + props.eid)
 
-    console.log(eid, props.eid);
+    // console.log(eid, props.eid);
     useEffect(()=>{
         // setEid('wordcloud-' + props.eid);
     },[])

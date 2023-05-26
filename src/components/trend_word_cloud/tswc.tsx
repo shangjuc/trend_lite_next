@@ -43,7 +43,7 @@ export default function TsWordCloud(props:{eid:string}){
         
         if ( (typeof window !== "undefined") || true) {
             // Client-side-only code
-            console.log(eid)
+            // console.log(eid)
             const targetElement = document.querySelector(`#${eid} canvas`) as HTMLElement;
             if(targetElement != null){
                 wordcloud(

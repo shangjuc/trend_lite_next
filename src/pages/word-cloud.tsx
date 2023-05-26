@@ -9,6 +9,25 @@ import Navbar from '@/components/navbar/navbar'
 import WordCloudPanel from "@/components/trend_word_cloud/wc_panel";
 const title_msg = `Word Cloud Demo`;
 
+const capture = async () => {
+    const canvas = document.createElement("canvas");
+    const context:any = canvas.getContext("2d");
+    const video = document.createElement("video");
+  
+    try {
+      const captureStream = await navigator.mediaDevices.getDisplayMedia();
+      video.srcObject = captureStream;
+      context.drawImage(video, 0, 0, window.innerWidth, window.innerHeight);
+      const frame = canvas.toDataURL("image/png");
+      captureStream.getTracks().forEach(track => track.stop());
+    //   window.location.href = frame;
+
+      return frame;
+    } catch (err) {
+      console.error("Error: " + err);
+    }
+  };
+
 export default function wc() {
     return (
         <>  
@@ -16,7 +35,9 @@ export default function wc() {
                 <title>{title_msg}</title>
             </Head>
             <Navbar/>
+
             <div className="twc-container flex flex-wrap w-full justify-center h-96 items-center">
+                <button onClick={capture}>Capture</button>
                 <div className="flex w-full justify-center">
                     {/* <span>{a}</span> */}
                 </div>
