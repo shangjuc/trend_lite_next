@@ -14,7 +14,7 @@ export default function wc() {
         <>  
             <Head>
                 <title>{title_msg}</title>
-            </Head>
+            </Head>  
             <Navbar/>
             <div className="twc-container flex flex-wrap w-full justify-center h-96 items-center">
                 <div className="flex w-full justify-center">
