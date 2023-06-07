@@ -11,7 +11,7 @@ function make_list(){
         if(i == 0){
             weight = 12;
         }
-        let word_arr = ['AAA', 'BBB', 'CCC', 'DDD', 'EEE', 'FFF'];
+        let word_arr = ['JJJJ', 'BBB', 'CCC', 'DDD', 'EEE', 'FFF'];
         let word = word_arr[Math.floor(Math.random() * word_arr.length)]
         list.push([word, weight]);
     }
