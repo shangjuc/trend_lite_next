@@ -15,17 +15,21 @@ RUN /bin/bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION && nvm use
 ENV NODE_PATH $NVM_DIR/versions/node/$NODE_VERSION/bin
 ENV PATH $NODE_PATH:$PATH
 
+# docker build -t u22_node16 ./
+# docker run -it -v $(pwd):/home/trend_lite_next -p 4500:4500 u22_node16 bin/bash 
+# cd /home/trend_lite_next/
+# npm i
+# npm run dev
+
+# RUN npm -v
+# RUN node -v
+
 # RUN apt update  
     # && apt-get install -y -q \
     # build-essential \ 
     # curl \ 
     # git \
     # libssl-dev 
-
-
-# RUN npm -v
-# RUN node -v
-
 
 # RUN apt install nodejs -y
 # RUN apt install npm -y
