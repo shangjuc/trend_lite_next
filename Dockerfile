@@ -15,8 +15,8 @@ RUN /bin/bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION && nvm use
 ENV NODE_PATH $NVM_DIR/versions/node/$NODE_VERSION/bin
 ENV PATH $NODE_PATH:$PATH
 
-# docker build -t u22_node16 ./
-# docker run -it -v $(pwd):/home/trend_lite_next -p 4500:4500 u22_node16 bin/bash 
+# docker build -t u22n16 ./
+# docker run -it -v $(pwd):/home/trend_lite_next -p 4500:4500 u22n16 bin/bash 
 # cd /home/trend_lite_next/
 # npm i
 # npm run dev
