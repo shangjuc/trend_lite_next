@@ -1,7 +1,21 @@
 services:
-  web:
-    build: .
-    ports:
-      - "4500:4500"
-  redis:
-    image: "redis:alpine"
+  webdev: 
+    image: "webdev_v2"
+    command: /bin/bash -c "npm run dev"
+    ports: 
+      - 4500:4500
+    working_dir: /app
+    volumes:
+      - ./:/app
+  e2e: 
+    image: "e2e_v4"
+    # command: /bin/bash -c "./node_modules/.bin/cypress install && npm run e2e"
+    command: /bin/bash -c "npm run e2e"
+    ports: 
+      - 4501:4500
+    working_dir: /app
+    volumes:
+      - ./:/app
+
+
+#docker compose up

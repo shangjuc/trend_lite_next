@@ -1,0 +1,35 @@
+FROM ubuntu:20.04
+
+# MAINTAINER SJ Chen
+
+RUN apt-get update  
+RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata. 
+
+# Install Nvm 
+RUN echo "y" | apt-get install curl
+RUN mkdir -p /usr/local/nvm
+ENV NVM_DIR /usr/local/nvm
+ENV NODE_VERSION v16.20.0
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+RUN /bin/bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION && nvm use --delete-prefix $NODE_VERSION"
+ENV NODE_PATH $NVM_DIR/versions/node/$NODE_VERSION/bin
+ENV PATH $NODE_PATH:$PATH
+RUN /bin/bash -c "$NODE_PATH/npm -v"
+
+ENV CODE_DIR /app
+RUN /bin/bash -c "mkdir $CODE_DIR"
+
+CMD [\
+    # "cd /app",\
+    # "npm i",\
+    # "./node_modules/.bin/cypress install",\
+    ]
+
+
+# docker build -t webdev_v2 -f Dockerfile_webdev_v2 .
+# docker run -it -v $(pwd):/app -p 4500:4500 webdev_v2 bin/bash 
+# cd /app
+# npm i
+# npm run dev
+
+
