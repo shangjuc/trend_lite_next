@@ -26,7 +26,7 @@ CMD [\
     ]
 
 
-# docker build -t webdev_v2 -f Dockerfile_webdev_v2 .
+# docker build -t webdev_v2 -f ./dockerfiles/Dockerfile_webdev_v2 .
 # docker run -it -v $(pwd):/app -p 4500:4500 webdev_v2 bin/bash 
 # cd /app
 # npm i

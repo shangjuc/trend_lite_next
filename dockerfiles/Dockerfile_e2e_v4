@@ -52,7 +52,7 @@ CMD [\
     ]
 
 
-# docker build -t e2e_v4 -f Dockerfile_e2e_v4 .
+# docker build -t e2e_v4 -f ./dockerfiles/Dockerfile_e2e_v4 .
 # docker run -it -v $(pwd):/app -p 4500:4500 e2e_v4 bin/bash 
 # cd /app
 # npm i
