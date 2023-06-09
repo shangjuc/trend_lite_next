@@ -22,7 +22,7 @@ RUN /bin/bash -c "mkdir $CODE_DIR"
 
 # Cypress
 # RUN /bin/bash -c "npx cypress install --force"
-RUN /bin/bash -c "cd /app && npm install cypress"
+RUN /bin/bash -c "cd /app && npm install cypress --save-dev"
 RUN apt-get install -y --force-yes -q \
     libgtk2.0-0 \
     libgtk-3-0 \
