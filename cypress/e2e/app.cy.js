@@ -10,6 +10,6 @@ describe('Navigation', () => {
         cy.url().should('include', '/chatgpt/ai');
 
         // The new page should contain an h1 with "About page"
-        cy.get('h1').contains('AI模擬');
+        cy.get('h1').contains('AI模擬788');
     });
 });
