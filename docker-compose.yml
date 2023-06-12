@@ -1,22 +1,32 @@
 services:
-  webdev: 
+  # webdev: 
+  #   image: "webdev_v2"
+  #   command: /bin/bash -c "npm run dev"
+  #   ports: 
+  #     - 4501:4500
+  #   working_dir: /app
+  #   volumes:
+  #     - ./:/app
+  webstart: 
     image: "webdev_v2"
-    command: /bin/bash -c "npm run dev"
-    ports: 
-      - 4501:4500
-    working_dir: /app
-    volumes:
-      - ./:/app
-  e2e: 
-    image: "e2e_v4"
     # command: /bin/bash -c "./node_modules/.bin/cypress install && npm run e2e"
-    command: /bin/bash -c "npm run e2e"
-    network_mode: host
-    # ports: 
-    #   - 4501:4500
+    command: /bin/bash -c "npm run build && npm run start"
+    # network_mode: host
+    ports: 
+      - 4500:4500
     working_dir: /app
     volumes:
       - ./:/app
+  # e2e: 
+  #   image: "e2e_v4"
+  #   # command: /bin/bash -c "./node_modules/.bin/cypress install && npm run e2e"
+  #   command: /bin/bash -c "npm run e2e"
+  #   network_mode: host
+  #   # ports: 
+  #   #   - 4501:4500
+  #   working_dir: /app
+  #   volumes:
+  #     - ./:/app
 
 
 #docker compose up
