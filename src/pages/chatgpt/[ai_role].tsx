@@ -248,7 +248,7 @@ const ChatWithAi = () =>{
                 <div className="card flex flex-wrap justify-center w-full md:w-[768px] min-w-[300px] h-auto px-5 sm:px-10 border rounded border-white">
                     <div className="sticky top-0 pt-6 w-full bg-black ">
                         {/* <h1>{path_role}</h1> */}
-                        <h1 className=" text-center mb-3">{aiRole === 'kotoha' ? '我婆琴葉' : translateWord(aiRole)}模擬器</h1>
+                        <h1 className=" text-center mb-3 text-white">{aiRole === 'kotoha' ? '我婆琴葉' : translateWord(aiRole)}模擬器</h1>
                         {/* <Loading /> */}
                         <div className="btn-container flex w-full flex-wrap">
                             {aiRoles.map((item, idx) => {
