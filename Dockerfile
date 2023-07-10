@@ -3,7 +3,9 @@ FROM ubuntu:20.04
 # MAINTAINER SJ Chen
 
 RUN apt-get update  
-RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata. 
+# RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata. 
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
 
 # Install Nvm 
 RUN echo "y" | apt-get install curl
@@ -28,7 +30,7 @@ RUN apt-get install -y --force-yes -q \
     libgtk-3-0 \
     libgbm-dev \
     # libnotify-dev \
-# libnotify-dev should echo geographic area
+    # libnotify-dev should echo geographic area
     libgconf-2-4 \ 
     libnss3 \
     libxss1 \
@@ -43,6 +45,9 @@ RUN apt-get install -y --force-yes -q \
 RUN apt-get install -y firefox
 RUN apt-get install -y fonts-wqy-zenhei
 # RUN apt install fonts-wqy-zenhei
+RUN /bin/bash -c "cd /app && npm install cypress@12.13.0 --save-dev && ./node_modules/.bin/cypress install"
+RUN apt-get install -y --force-yes -q \
+    libnotify-dev 
 
 
 CMD [\
@@ -52,7 +57,7 @@ CMD [\
     ]
 
 
-# docker build -t e2e_v4 -f ./dockerfiles/Dockerfile_e2e_v4 .
+# docker build -t e2e_v6 -f ./dockerfiles/Dockerfile_e2e_v6 .
 # docker run -it -v $(pwd):/app -p 4500:4500 e2e_v4 bin/bash 
 # cd /app
 # npm i
