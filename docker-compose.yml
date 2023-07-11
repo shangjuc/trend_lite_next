@@ -17,10 +17,8 @@ services:
   #   working_dir: /app
   #   volumes:
   #     - ./:/app
-
-
   # e2e: 
-  #   image: "e2e_v4"
+  #   image: "e2e_v5"
   #   # command: /bin/bash -c "./node_modules/.bin/cypress install && npm run e2e"
   #   command: /bin/bash -c "npm run e2e"
   #   network_mode: host
@@ -29,8 +27,8 @@ services:
   #   working_dir: /app
   #   volumes:
   #     - ./:/app
-  e2ev5: 
-    image: "e2e_v5"
+  e2e: 
+    image: "e2e_v7"
     # command: /bin/bash -c "./node_modules/.bin/cypress install && npm run e2e"
     command: /bin/bash -c "npm run e2e"
     network_mode: host

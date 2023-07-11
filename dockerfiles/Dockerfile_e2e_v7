@@ -30,7 +30,7 @@ RUN apt-get install -y --force-yes -q \
     libgtk-3-0 \
     libgbm-dev \
     # libnotify-dev \
-    # libnotify-dev should echo geographic area
+# libnotify-dev should echo geographic area
     libgconf-2-4 \ 
     libnss3 \
     libxss1 \
