@@ -1,6 +1,9 @@
+// 'use client'
+
 import React, { ReactPropTypes, useEffect, useState } from "react";
 import dynamic from 'next/dynamic'
-const JsWordCloud = dynamic(() => import('./jswc'), { ssr: false })
+// import JsWordCloud from './jswc'
+const JsWordCloud = dynamic(() => import('./jswc'), { ssr: false }) 
 const TsWordCloud = dynamic(() => import('./tswc'), { ssr: false })
 
 export default function WordCloudPanel(props:{eid: string}) {
