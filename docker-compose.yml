@@ -27,16 +27,27 @@ services:
   #   working_dir: /app
   #   volumes:
   #     - ./:/app
+  # e2e: 
+  #   image: "e2e_v7"
+  #   # command: /bin/bash -c "./node_modules/.bin/cypress install && npm run e2e"
+  #   command: /bin/bash -c "npm run e2e"
+  #   network_mode: host
+  #   # ports: 
+  #   #   - 4501:4500
+  #   working_dir: /app
+  #   volumes:
+  #     - ./:/app
+
   e2e: 
-    image: "e2e_v7"
+    image: "e2e_v8"
     # command: /bin/bash -c "./node_modules/.bin/cypress install && npm run e2e"
     command: /bin/bash -c "npm run e2e"
     network_mode: host
     # ports: 
     #   - 4501:4500
-    working_dir: /app
+    working_dir: /e2e
     volumes:
-      - ./:/app
+      - ./:/e2e
 
 
-#docker compose up
+# docker compose up

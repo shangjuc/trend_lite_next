@@ -58,7 +58,7 @@ CMD [\
 
 
 # docker build -t e2e_v7 -f ./dockerfiles/Dockerfile_e2e_v7 .
-# docker run -it -v $(pwd):/app -p 4500:4500 e2e_v4 bin/bash 
+# docker run -it -v $(pwd):/app -p 4500:4500 e2e_v7 bin/bash 
 # cd /app
 # npm i
 # ./node_modules/.bin/cypress install
